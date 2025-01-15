@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>BPMN Viewer (Lokal)</title>
+
+    <!-- required viewer styles -->
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.1.2/dist/assets/bpmn-js.css">
+
+    <!-- viewer distro (with pan and zoom) -->
+    <script src="https://unpkg.com/bpmn-js@18.1.2/dist/bpmn-navigated-viewer.development.js"></script>
+
+    <!-- needed for this example only -->
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+    <style>
+        html, body, #canvas {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas"></div>
+
+    <script>
+        // Lokale Datei verwenden
+        var diagramUrl = './diagram.bpmn';
+
+        var bpmnViewer = new BpmnJS({
+            container: '#canvas'
+        });
+
+        async function openDiagram(bpmnXML) {
+            try {
+                await bpmnViewer.importXML(bpmnXML);
+                bpmnViewer.get('canvas').zoom('fit-viewport');
+            } catch (err) {
+                console.error('Fehler beim Laden des Diagramms:', err);
+            }
+        }
+
+        // Lokale Datei per Fetch laden
+        fetch(diagramUrl)
+            .then(response => response.text())
+            .then(openDiagram)
+            .catch(err => console.error('Datei konnte nicht geladen werden:', err));
+    </script>
+</body>
+</html>
